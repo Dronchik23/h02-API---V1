@@ -67,7 +67,7 @@ app.put('/blogs/:blogId', nameValidation, youtubeUrlValidation, inputValidationM
     const blog = blogs.find(b => b.id === id)
     if (blog) {
         blog.name = name
-        blog.author = youtubeUrl
+        blog.youtubeUrl = youtubeUrl
         res.sendStatus(204)
         return
     } else {
