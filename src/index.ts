@@ -48,7 +48,7 @@ app.post('/blogs', nameValidation, youtubeUrlValidation, inputValidationMiddlewa
     const youtubeUrl = req.body.youtubeUrl
 
     const newBlog = {
-        "id": (+(new Date())).toString(),
+        "id": (+(new Date())),
         "name": name,
         "youtubeUrl": youtubeUrl
     }
@@ -78,9 +78,9 @@ app.put('/blogs/:blogId', nameValidation, youtubeUrlValidation, inputValidationM
 
 app.delete('/blogs/:blogId', (req: Request, res: Response) => {
     const id = +req.params.blogId
-    const newBlog = blogs.filter(b => b.id !== id)
-    if (newBlog.length < blogs.length) {
-        blogs = newBlog
+    const newBlogs = blogs.filter(b => b.id !== id)
+    if (newBlogs.length < blogs.length) {
+        blogs = newBlogs
         res.sendStatus(204)
     } else {
         res.sendStatus(404)
@@ -118,7 +118,7 @@ app.post('/posts', titleValidation, shortDescriptionValidation, contentValidatio
 
     // подготавливаем объект для сохранения
     const newPost = {
-        "id": (+(new Date())).toString(),
+        "id": (+(new Date())),
         "title": title,
         "shortDescription": shortDescription,
         "content": content,
@@ -167,9 +167,9 @@ app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValida
 
 app.delete('/posts/:id', (req: Request, res: Response) => {
     const id = +req.params.id
-    const newPost = blogs.filter(p => p.id !== id)
-    if (newPost.length < posts.length) {
-        posts = newPost
+    const newPosts = blogs.filter(p => p.id !== id)
+    if (newPosts.length < posts.length) {
+        posts = newPosts
         res.sendStatus(204)
     } else {
         res.sendStatus(404)
