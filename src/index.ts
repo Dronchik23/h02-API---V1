@@ -1,15 +1,16 @@
 import express, {Request, Response} from 'express'
 import bodyParser from 'body-parser'
-import {body, validationResult} from "express-validator";
-import {inputValidationMiddleware} from "./input-validation-middleware/input-validation-middleware";
+import {body} from "express-validator";
+import {inputValidationMiddleware} from "./middlewares/input-validation-middleware";
+import {basicAuthMiddleware} from "./middlewares/basic-auth-middleware";
 
 const app = express()
 
-app.use(bodyParser.json())
+//app.use(bodyParser.json())
+app.use(express.json())
 
 let blogs: any[] = []
 let posts: any[] = []
-
 
 
 const port = process.env.PORT || 2000
@@ -23,7 +24,6 @@ const titleValidation = body('title').trim().isLength({min: 1, max: 30}).notEmpt
 const shortDescriptionValidation = body('shortDescription').trim().isLength({min: 1, max: 100}).notEmpty().isString()
 const contentValidation = body('content').trim().isLength({min: 1, max: 1000}).notEmpty().isString()
 const blogIdValidation = body('blogId').trim().isLength({min: 13, max: 13}).notEmpty().isString()
-
 
 // Blog
 app.get('/blogs', (req: Request, res: Response) => {
@@ -41,7 +41,7 @@ app.get('/blogs/:id', (req: Request, res: Response) => {
     }
 })
 
-app.post('/blogs', nameValidation, youtubeUrlValidation, inputValidationMiddleware, (req: Request, res: Response) => {
+app.post('/blogs', nameValidation, youtubeUrlValidation, inputValidationMiddleware, basicAuthMiddleware, (req: Request, res: Response) => {
 
     const name = req.body.name
     const youtubeUrl = req.body.youtubeUrl
@@ -57,7 +57,7 @@ app.post('/blogs', nameValidation, youtubeUrlValidation, inputValidationMiddlewa
     return res.status(201).send(newBlog)
 })
 
-app.put('/blogs/:blogId', nameValidation, youtubeUrlValidation, inputValidationMiddleware, (req: Request, res: Response) => {
+app.put('/blogs/:blogId', nameValidation, youtubeUrlValidation, inputValidationMiddleware, basicAuthMiddleware, (req: Request, res: Response) => {
 
     const name = req.body.name
     const youtubeUrl = req.body.youtubeUrl
@@ -75,8 +75,9 @@ app.put('/blogs/:blogId', nameValidation, youtubeUrlValidation, inputValidationM
     }
 })
 
-app.delete('/blogs/:blogId', blogIdValidation, (req: Request, res: Response) => {
+app.delete('/blogs/:blogId', basicAuthMiddleware, (req: Request, res: Response) => {
     const id = req.params.blogId
+
     const newBlogs = blogs.filter(b => b.id !== id)
     if (newBlogs.length < blogs.length) {
         blogs = newBlogs
@@ -93,7 +94,7 @@ app.get('/posts', (req: Request, res: Response) => {
     return res.send(posts)
 })
 
-app.post('/posts', titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware, (req: Request, res: Response) => {
+app.post('/posts', titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware, basicAuthMiddleware, (req: Request, res: Response) => {
 
     // данные которые прислали мне
     const title = req.body.title
@@ -142,7 +143,7 @@ app.get('/posts/:id', (req: Request, res: Response) => {
     }
 })
 
-app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware, (req: Request, res: Response) => {
+app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware, basicAuthMiddleware, (req: Request, res: Response) => {
 
     const title = req.body.title
     const shortDescription = req.body.shortDescription
@@ -164,7 +165,7 @@ app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValida
     }
 })
 
-app.delete('/posts/:id', (req: Request, res: Response) => {
+app.delete('/posts/:id', basicAuthMiddleware, (req: Request, res: Response) => {
     const id = req.params.id
     const newPosts = posts.filter(p => p.id !== id)
     if (newPosts.length < posts.length) {
