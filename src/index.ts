@@ -22,7 +22,7 @@ const youtubeUrlValidation = body('youtubeUrl').trim().isLength({min: 1, max: 10
 const titleValidation = body('title').trim().isLength({min: 1, max: 30}).notEmpty().isString()
 const shortDescriptionValidation = body('shortDescription').trim().isLength({min: 1, max: 100}).notEmpty().isString()
 const contentValidation = body('content').trim().isLength({min: 1, max: 1000}).notEmpty().isString()
-const blogId = body('blogId').trim().isLength({min: 13, max: 13}).notEmpty().isString()
+const blogIdValidation = body('blogId').trim().isLength({min: 13, max: 13}).notEmpty().isString()
 
 
 // Blog
@@ -75,7 +75,7 @@ app.put('/blogs/:blogId', nameValidation, youtubeUrlValidation, inputValidationM
     }
 })
 
-app.delete('/blogs/:blogId', (req: Request, res: Response) => {
+app.delete('/blogs/:blogId', blogIdValidation, inputValidationMiddleware, (req: Request, res: Response) => {
     const id = req.params.blogId
     const newBlogs = blogs.filter(b => b.id !== id)
     if (newBlogs.length < blogs.length) {
@@ -93,7 +93,7 @@ app.get('/posts', (req: Request, res: Response) => {
     return res.send(posts)
 })
 
-app.post('/posts', titleValidation, shortDescriptionValidation, contentValidation, blogId, inputValidationMiddleware, (req: Request, res: Response) => {
+app.post('/posts', titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware, (req: Request, res: Response) => {
 
     // данные которые прислали мне
     const title = req.body.title
@@ -142,7 +142,7 @@ app.get('/posts/:id', (req: Request, res: Response) => {
     }
 })
 
-app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValidation, blogId, inputValidationMiddleware, (req: Request, res: Response) => {
+app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware, (req: Request, res: Response) => {
 
     const title = req.body.title
     const shortDescription = req.body.shortDescription
