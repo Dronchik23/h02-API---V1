@@ -41,7 +41,7 @@ app.get('/blogs/:id', (req: Request, res: Response) => {
     }
 })
 
-app.post('/blogs', nameValidation, youtubeUrlValidation, inputValidationMiddleware, basicAuthMiddleware, (req: Request, res: Response) => {
+app.post('/blogs', basicAuthMiddleware, nameValidation, youtubeUrlValidation, inputValidationMiddleware,  (req: Request, res: Response) => {
 
     const name = req.body.name
     const youtubeUrl = req.body.youtubeUrl
@@ -57,7 +57,7 @@ app.post('/blogs', nameValidation, youtubeUrlValidation, inputValidationMiddlewa
     return res.status(201).send(newBlog)
 })
 
-app.put('/blogs/:blogId', nameValidation, youtubeUrlValidation, inputValidationMiddleware, basicAuthMiddleware, (req: Request, res: Response) => {
+app.put('/blogs/:blogId',  basicAuthMiddleware, nameValidation, youtubeUrlValidation, inputValidationMiddleware, (req: Request, res: Response) => {
 
     const name = req.body.name
     const youtubeUrl = req.body.youtubeUrl
@@ -94,7 +94,7 @@ app.get('/posts', (req: Request, res: Response) => {
     return res.send(posts)
 })
 
-app.post('/posts', titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware, basicAuthMiddleware, (req: Request, res: Response) => {
+app.post('/posts', basicAuthMiddleware, titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware,  (req: Request, res: Response) => {
 
     // данные которые прислали мне
     const title = req.body.title
@@ -143,7 +143,7 @@ app.get('/posts/:id', (req: Request, res: Response) => {
     }
 })
 
-app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware, basicAuthMiddleware, (req: Request, res: Response) => {
+app.put('/posts/:id', basicAuthMiddleware, titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware,  (req: Request, res: Response) => {
 
     const title = req.body.title
     const shortDescription = req.body.shortDescription
