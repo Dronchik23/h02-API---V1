@@ -8,9 +8,8 @@ const app = express()
 app.use(bodyParser.json())
 
 let blogs: any[] = []
+let posts: any[] = []
 
-let posts: any[]
-posts = []
 
 
 const port = process.env.PORT || 2000
@@ -33,7 +32,7 @@ app.get('/blogs', (req: Request, res: Response) => {
 
 app.get('/blogs/:blogId', (req: Request, res: Response) => {
     const id = req.params.blogId;
-    const blog = blogs.find(b => b.id == id)
+    const blog = posts.find(b => b.id == id)
     if (blog) {
         res.send(blog)
     } else {
@@ -104,7 +103,7 @@ app.post('/posts', titleValidation, shortDescriptionValidation, contentValidatio
 
 
     // ищем блог в нашем массиве блогов
-    const blog = blogs.find(blog => blog.id === blogId)
+    const blog = blogs.find(b => b.id === blogId)
     if (!blog) {
         return res.status(400).send({
             "errorsMessages": [
@@ -167,7 +166,7 @@ app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValida
 
 app.delete('/posts/:id', (req: Request, res: Response) => {
     const id = req.params.id
-    const newPosts = blogs.filter(p => p.id !== id)
+    const newPosts = posts.filter(p => p.id !== id)
     if (newPosts.length < posts.length) {
         posts = newPosts
         res.sendStatus(204)
@@ -177,7 +176,7 @@ app.delete('/posts/:id', (req: Request, res: Response) => {
 })
 
 app.delete('/testing/all-data', (req: Request, res: Response) => {
-    blogs = []
+    posts = []
     res.sendStatus(204)
 })
 
