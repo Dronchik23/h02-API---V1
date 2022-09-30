@@ -30,11 +30,11 @@ app.get('/blogs', (req: Request, res: Response) => {
     return res.send(blogs)
 })
 
-app.get('/blogs/:blogId', (req: Request, res: Response) => {
-    const id = req.params.blogId;
-    const blog = posts.find(b => b.id == id)
-    if (blog) {
-        res.send(blog)
+app.get('/blogs/:id', (req: Request, res: Response) => {
+    const id = +req.params.id;
+    const blog = blogs.find(b => b.id == id)
+    if (blogs) {
+        res.send(blogs)
     } else {
         res.sendStatus(404)
         return;
