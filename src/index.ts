@@ -75,7 +75,7 @@ app.put('/blogs/:blogId', nameValidation, youtubeUrlValidation, inputValidationM
     }
 })
 
-app.delete('/blogs/:blogId', blogIdValidation, inputValidationMiddleware, (req: Request, res: Response) => {
+app.delete('/blogs/:blogId', blogIdValidation, (req: Request, res: Response) => {
     const id = req.params.blogId
     const newBlogs = blogs.filter(b => b.id !== id)
     if (newBlogs.length < blogs.length) {
