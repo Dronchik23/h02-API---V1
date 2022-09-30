@@ -93,7 +93,7 @@ app.get('/posts', (req: Request, res: Response) => {
     return res.send(posts)
 })
 
-app.post('/posts', titleValidation, shortDescriptionValidation, contentValidation, blogId, (req: Request, res: Response) => {
+app.post('/posts', titleValidation, shortDescriptionValidation, contentValidation, blogId, inputValidationMiddleware, (req: Request, res: Response) => {
 
     // данные которые прислали мне
     const title = req.body.title
@@ -105,7 +105,7 @@ app.post('/posts', titleValidation, shortDescriptionValidation, contentValidatio
     // ищем блог в нашем массиве блогов
     const blog = blogs.find(b => b.id === blogId)
     if (!blog) {
-        return res.status(400).send({
+        return res.status(401).send({
             "errorsMessages": [
                 {
                     "message": "string",
@@ -142,7 +142,7 @@ app.get('/posts/:id', (req: Request, res: Response) => {
     }
 })
 
-app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValidation, blogId, (req: Request, res: Response) => {
+app.put('/posts/:id', titleValidation, shortDescriptionValidation, contentValidation, blogId, inputValidationMiddleware, (req: Request, res: Response) => {
 
     const title = req.body.title
     const shortDescription = req.body.shortDescription
